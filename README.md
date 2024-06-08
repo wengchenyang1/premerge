@@ -6,23 +6,15 @@ This repository contains a single Python script that runs pre-merge jobs to ensu
 
 To set up the pre-merge job runner, follow these steps:
 
-1. **Clone the Repository**
+1. **Add as a Submodule**
 
-    Clone the repository to your project's root folder:
-
-    ```sh
-    git clone <repository-url>
-    ```
-
-2. **Add as a Submodule**
-
-    If you are integrating this as a submodule in your existing repository, add it using the following command:
+    You may integrate this as a submodule in your existing repository. Navigate to your project root folder and add `premerge` using the following command:
 
     ```sh
-    git submodule add <submodule-repository-url> premerge
+    git submodule add https://github.com/wengchenyang1/premerge.git premerge
     ```
 
-3. **Run the Setup Script**
+2. **Run the Setup Script**
 
     ```sh
     bash ./premerge/setup.sh
