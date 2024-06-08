@@ -4,35 +4,32 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Define the filenames
-PYLINT_RC_FILE=".pylintrc"
-CLANG_FORMAT_FILE=".clang-format"
+FILES_TO_COPY=(".pylintrc" ".clang-format" "CPPLINT.cfg")
 
-# Check if .pylintrc and .clang-format exist in the current folder
-if [[ ! -f "$SCRIPT_DIR/$PYLINT_RC_FILE" ]]; then
-    echo "$PYLINT_RC_FILE does not exist in the current directory."
-    exit 1
-fi
+# Function to check and copy files
+copy_if_not_exists() {
+    local file=$1
+    local source_dir=$2
+    local dest_dir=$3
 
-if [[ ! -f "$SCRIPT_DIR/$CLANG_FORMAT_FILE" ]]; then
-    echo "$CLANG_FORMAT_FILE does not exist in the current directory."
-    exit 1
-fi
+    if [[ ! -f "$source_dir/$file" ]]; then
+        echo "$file does not exist in the current directory."
+        exit 1
+    fi
 
-# Check if .pylintrc and .clang-format exist in the parent folder
+    if [[ ! -f "$dest_dir/$file" ]]; then
+        cp "$source_dir/$file" "$dest_dir"
+        echo "Copied $file to the parent directory."
+    else
+        echo "$file already exists in the parent directory."
+    fi
+}
+
+# Check if files exist in the current folder and copy them to the parent folder if needed
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
-if [[ ! -f "$PARENT_DIR/$PYLINT_RC_FILE" ]]; then
-    cp "$SCRIPT_DIR/$PYLINT_RC_FILE" "$PARENT_DIR"
-    echo "Copied $PYLINT_RC_FILE to the parent directory."
-else
-    echo "$PYLINT_RC_FILE already exists in the parent directory."
-fi
-
-if [[ ! -f "$PARENT_DIR/$CLANG_FORMAT_FILE" ]]; then
-    cp "$SCRIPT_DIR/$CLANG_FORMAT_FILE" "$PARENT_DIR"
-    echo "Copied $CLANG_FORMAT_FILE to the parent directory."
-else
-    echo "$CLANG_FORMAT_FILE already exists in the parent directory."
-fi
+for file in "${FILES_TO_COPY[@]}"; do
+    copy_if_not_exists "$file" "$SCRIPT_DIR" "$PARENT_DIR"
+done
 
 echo "Setup complete."
