@@ -1,6 +1,6 @@
 # Pre-merge Job Runner
 
-This repository contains an all-in-one python script run pre-merge jobs for code quality checks. These checks include formatting, linting, and copyright management for both Python and C++ files.
+This repository contains a single Python script that runs pre-merge jobs to ensure code quality. These jobs encompass formatting, linting, and copyright management for both Python and C++ files.
 
 ## Installation
 
@@ -28,7 +28,7 @@ To set up the pre-merge job runner, follow these steps:
     bash ./premerge/setup.sh
     ```
 
-    The `setup.sh` script will set up necessary configurations.
+    The `setup.sh` script will set up necessary configurations, such as copying template config files for linting and formatting to the root folder (if there are not any).
 
 ## Usage
 
