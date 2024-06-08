@@ -109,21 +109,35 @@ def format_cpp_files() -> int:
     try:
         cpp_files = get_changed_files(CPP_FILE_EXT)
         if cpp_files:
-            result = subprocess.run(
-                ["clang-format"] + cpp_files, capture_output=True, text=True, check=True
-            )
-            _ = subprocess.run(
+            for cpp_file in cpp_files:
+                result = subprocess.run(
+                    ["clang-format", "-output-replacements-xml", cpp_file],
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+                _ = subprocess.run(
+                    ["clang-format", "-i", cpp_file],
+                    capture_output=False,
+                    text=False,
+                    check=False
+                )
+                if "<replacement " in result.stdout:
+                    raise ValueError(f"The file {cpp_file} would be reformatted.")
+
+            # If no errors were raised, format the files in-place
+            subprocess.run(
                 ["clang-format", "-i"] + cpp_files,
                 capture_output=True,
                 text=True,
                 check=True,
             )
-
-            if len(result.stdout) > 0:
-                raise ValueError("There are C++ files that are reformatted.")
         return _SUCCESS
     except ValueError as error:
         print(f"Error: {error}")
+        return _FAIL
+    except subprocess.CalledProcessError as cpe:
+        print(f"Subprocess error: {cpe}")
         return _FAIL
 
 
