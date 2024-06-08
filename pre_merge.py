@@ -194,8 +194,6 @@ def write_copyright() -> int:
                         print(
                             f"The .owner file has been updated with the owner name '{owner_name}'."
                         )
-                    else:
-                        print(f"Company name '{owner_name}' read from '{owner_file}'.")
 
             return owner_name
 
@@ -238,10 +236,17 @@ def write_copyright() -> int:
 
 
 if __name__ == "__main__":
-    write_copyright()
+    num_fails = 0
 
-    format_cpp_files()
-    format_python_files()
+    num_fails += write_copyright()
 
-    lint_cpp_files()
-    lint_python_files()
+    num_fails += format_cpp_files()
+    num_fails += format_python_files()
+
+    num_fails += lint_cpp_files()
+    num_fails += lint_python_files()
+
+    if num_fails == 0:
+        print("\033[92mAll tasks completed successfully! 🎉\033[0m")
+    else:
+        print("\033[91m{} job(s) failed.\033[0m".format(num_fails))
