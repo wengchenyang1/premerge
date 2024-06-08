@@ -76,7 +76,7 @@ def lint_python_files() -> int:
             )
             score = float(score_line.split("/")[0].split(" ")[-1])
             if score < PYLINT_FAIL:
-                print(f"Failed linting with score {score}")
+                print(f"pylint: Failed linting with score {score}")
                 return _FAIL
     return _SUCCESS
 
@@ -85,6 +85,7 @@ def format_python_files() -> int:
     try:
         python_files = get_changed_files(PY_FILES_EXT)
         if python_files:
+            num_reformat = 0
             for file in python_files:
                 _ = subprocess.run(
                     ["isort", file], capture_output=True, text=True, check=True
@@ -98,7 +99,9 @@ def format_python_files() -> int:
                 )
 
                 if "reformatted" in black_process.stdout:
-                    raise ValueError(f"{file} was reformatted.")
+                    num_reformat += 1
+            if num_reformat > 0:
+                raise ValueError(f"black: {num_reformat} file(s) would be reformatted.")
         return _SUCCESS
     except ValueError as error:
         print(f"Error: {error}")
@@ -109,29 +112,34 @@ def format_cpp_files() -> int:
     try:
         cpp_files = get_changed_files(CPP_FILE_EXT)
         if cpp_files:
+            num_reformat = 0
             for cpp_file in cpp_files:
                 result = subprocess.run(
                     ["clang-format", "-output-replacements-xml", cpp_file],
                     capture_output=True,
                     text=True,
-                    check=True
+                    check=True,
                 )
                 _ = subprocess.run(
                     ["clang-format", "-i", cpp_file],
                     capture_output=False,
                     text=False,
-                    check=False
+                    check=False,
                 )
                 if "<replacement " in result.stdout:
-                    raise ValueError(f"The file {cpp_file} would be reformatted.")
+                    num_reformat += 1
 
-            # If no errors were raised, format the files in-place
+            # Format the files in-place anyway
             subprocess.run(
                 ["clang-format", "-i"] + cpp_files,
                 capture_output=True,
                 text=True,
                 check=True,
             )
+            if num_reformat > 0:
+                raise ValueError(
+                    f"clang-format: {num_reformat} file(s) would be reformatted."
+                )
         return _SUCCESS
     except ValueError as error:
         print(f"Error: {error}")
@@ -158,7 +166,7 @@ def lint_cpp_files() -> int:
                     f" - {line}" for line in error_message.split("\n") if line
                 )
                 raise ValueError(
-                    f"Linting failed with the following messages:\n{formatted_error_message}"
+                    f"cpplint: Linting failed with the following messages:\n{formatted_error_message}"
                 )
         return _SUCCESS
     except ValueError as error:
@@ -227,7 +235,7 @@ def write_copyright() -> int:
         _write_copyright_to_files(py_license, py_files)
 
         if cpp_files or py_files:
-            raise ValueError("There are files without copyright!")
+            raise ValueError("write_copyright: There are files without copyright!")
 
         return _SUCCESS
     except ValueError as error:
@@ -249,4 +257,4 @@ if __name__ == "__main__":
     if num_fails == 0:
         print("\033[92mAll tasks completed successfully! 🎉\033[0m")
     else:
-        print("\033[91m{} job(s) failed.\033[0m".format(num_fails))
+        print(f"\033[91m{num_fails} job(s) failed.\033[0m")
