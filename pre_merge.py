@@ -26,7 +26,7 @@ def get_changed_files(target_extensions: List[str]) -> List[str]:
     Returns a list of changed files in the current git repository including the latest commit.
     """
     result = subprocess.run(
-        ["git", "status", "--porcelain", "-u"], stdout=subprocess.PIPE, check=True
+        ["git", "status", "--porcelain", "-u"], stdout=subprocess.PIPE, check=False
     )
 
     lines = result.stdout.decode("utf-8").split("\n")
@@ -45,7 +45,7 @@ def get_changed_files(target_extensions: List[str]) -> List[str]:
         result = subprocess.run(
             ["git", "log", "-1", "--name-only", "--pretty=format:"],
             stdout=subprocess.PIPE,
-            check=True,
+            check=False,
         )
 
         lines = result.stdout.decode("utf-8").split("\n")
@@ -88,14 +88,14 @@ def format_python_files() -> int:
             num_reformat = 0
             for file in python_files:
                 _ = subprocess.run(
-                    ["isort", file], capture_output=True, text=True, check=True
+                    ["isort", file], capture_output=True, text=True, check=False
                 )
                 black_process = subprocess.run(
                     ["black", file],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     text=True,
-                    check=True,
+                    check=False,
                 )
 
                 if "reformatted" in black_process.stdout:
@@ -118,7 +118,7 @@ def format_cpp_files() -> int:
                     ["clang-format", "-output-replacements-xml", cpp_file],
                     capture_output=True,
                     text=True,
-                    check=True,
+                    check=False,
                 )
                 _ = subprocess.run(
                     ["clang-format", "-i", cpp_file],
@@ -134,7 +134,7 @@ def format_cpp_files() -> int:
                 ["clang-format", "-i"] + cpp_files,
                 capture_output=True,
                 text=True,
-                check=True,
+                check=False,
             )
             if num_reformat > 0:
                 raise ValueError(
@@ -158,7 +158,7 @@ def lint_cpp_files() -> int:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                check=True,
+                check=False,
             )
             if process.returncode != 0:
                 error_message = process.stderr
@@ -244,7 +244,7 @@ def write_copyright() -> int:
 
 
 if __name__ == "__main__":
-    num_fails = 0
+    num_fails: int = 0
 
     num_fails += write_copyright()
 
