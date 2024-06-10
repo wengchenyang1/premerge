@@ -76,7 +76,9 @@ def lint_python_files() -> int:
             )
             score = float(score_line.split("/")[0].split(" ")[-1])
             if score < PYLINT_FAIL:
-                print(f"pylint: Failed linting with score {score}")
+                print(
+                    f"pylint: Failed linting with score {score} which is below the required {PYLINT_FAIL}"
+                )
                 return _FAIL
     return _SUCCESS
 
