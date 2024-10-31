@@ -68,18 +68,19 @@ def lint_python_files() -> int:
             reporter = TextReporter(pylint_output)
             lint.Run([file], reporter=reporter, exit=False)
             output = pylint_output.getvalue()
-            print(output)
-            score_line = next(
-                line
-                for line in output.split("\n")
-                if "Your code has been rated at" in line
-            )
-            score = float(score_line.split("/")[0].split(" ")[-1])
-            if score < PYLINT_FAIL:
-                print(
-                    f"pylint: Failed linting with score {score} which is below the required {PYLINT_FAIL}"
+            if len(output) > 0:
+                print(output)
+                score_line = next(
+                    line
+                    for line in output.split("\n")
+                    if "Your code has been rated at" in line
                 )
-                return _FAIL
+                score = float(score_line.split("/")[0].split(" ")[-1])
+                if score < PYLINT_FAIL:
+                    print(
+                        f"pylint: Failed linting with score {score} which is below the required {PYLINT_FAIL}"
+                    )
+                    return _FAIL
     return _SUCCESS
 
 
@@ -218,11 +219,18 @@ def write_copyright() -> int:
             max_lines_to_search = 4
             all_files = get_changed_files(extension)
             target_files = []
+
             for file_name in all_files:
                 with open(file_name, "r", encoding="utf-8") as file_obj:
-                    lines = [next(file_obj) for _ in range(max_lines_to_search)]
+                    lines = []
+                    for _ in range(max_lines_to_search):
+                        try:
+                            lines.append(next(file_obj))
+                        except StopIteration:
+                            break
                     if not any("copyright (c)" in line.lower() for line in lines):
                         target_files.append(file_name)
+
             return target_files
 
         year = subprocess.getoutput("date +%Y")
