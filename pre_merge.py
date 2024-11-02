@@ -5,6 +5,7 @@
 import io
 import os
 import subprocess
+from datetime import datetime
 from typing import List
 
 from pylint import lint
@@ -233,7 +234,7 @@ def write_copyright() -> int:
 
             return target_files
 
-        year = subprocess.getoutput("date +%Y")
+        year = datetime.now().year
         owner = _get_owner_name()
         cpp_license = f"/** Copyright (c) {year}, {owner} **/"
         py_license = f"# Copyright (c) {year}, {owner}"
