@@ -1,6 +1,10 @@
 # Pre-merge Job Runner
 
-This repository contains a single Python script that runs pre-merge jobs on _most recently changed files_. These jobs encompass formatting, linting, and copyright management for both Python and C++ files.
+This repository contains a single Python script that runs pre-merge jobs on _most recently changed files_. These jobs encompass formatting, linting, and copyright management for (currently)
+* Python
+* C++
+
+files.
 
 ## Installation
 
