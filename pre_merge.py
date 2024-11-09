@@ -64,6 +64,7 @@ def get_changed_files(target_extensions: List[str]) -> List[str]:
 def lint_python_files() -> int:
     python_files = get_changed_files(PY_FILES_EXT)
     if python_files:
+        print("Linting python files...")
         for file in python_files:
             pylint_output = io.StringIO()
             reporter = TextReporter(pylint_output)
@@ -89,6 +90,7 @@ def format_python_files() -> int:
     try:
         python_files = get_changed_files(PY_FILES_EXT)
         if python_files:
+            print("Formatting python files...")
             num_reformat = 0
             for file in python_files:
                 _ = subprocess.run(
@@ -116,6 +118,7 @@ def format_cpp_files() -> int:
     try:
         cpp_files = get_changed_files(CPP_FILE_EXT)
         if cpp_files:
+            print("Formatting C++ files...")
             num_reformat = 0
             for cpp_file in cpp_files:
                 result = subprocess.run(
@@ -157,6 +160,7 @@ def lint_cpp_files() -> int:
     try:
         cpp_files = get_changed_files(CPP_FILE_EXT)
         if cpp_files:
+            print("Linting C++ files...")
             process = subprocess.run(
                 ["cpplint"] + cpp_files,
                 stdout=subprocess.PIPE,
