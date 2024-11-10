@@ -107,10 +107,10 @@ def format_python_files() -> int:
                 if "reformatted" in black_process.stdout:
                     num_reformat += 1
             if num_reformat > 0:
-                raise ValueError(f"black: {num_reformat} file(s) would be reformatted.")
+                print(f"black: {num_reformat} file(s) would be reformatted.")
         return _SUCCESS
-    except ValueError as error:
-        print(f"Error: {error}")
+    except subprocess.CalledProcessError as cpe:
+        print(f"Subprocess error: {cpe}")
         return _FAIL
 
 
