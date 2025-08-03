@@ -1,6 +1,7 @@
 # Pre-merge Job Runner
 
 This repository contains a single Python script that runs pre-merge jobs on _most recently changed files_. These jobs encompass formatting, linting, and copyright management for (currently)
+
 * Python
 * C++
 
@@ -20,11 +21,19 @@ To set up the pre-merge job runner, follow these steps:
 
 2. **Run the Setup Script**
 
+    On Linux/macOS:
+
     ```sh
     bash ./premerge/setup.sh
     ```
 
-    The `setup.sh` script will set up necessary configurations, such as copying template config files for linting and formatting to the root folder (if there are not any).
+    On Windows:
+
+    ```bat
+    premerge\setup.bat
+    ```
+
+    The setup script will set up necessary configurations, such as copying template config files for linting and formatting to the root folder (if there are not any).
 
 ## Usage
 
@@ -36,7 +45,6 @@ To run the pre-merge checks, execute the following command in your project root 
 python premerge/pre_merge.py
 ```
 
-
 ## Note
 
 This setup script and accompanying pre-merge checks are designed for quick implementation and execution of a series of verification tasks in small projects. While it serves well for basic use cases, it may not be the optimal solution for larger projects with more complex requirements.
@@ -46,4 +54,3 @@ The single-file structure of this setup may limit its extensibility and scalabil
 ## TODOs
 
 See issues.
-
