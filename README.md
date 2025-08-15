@@ -19,6 +19,12 @@ To set up the pre-merge job runner, follow these steps:
     git submodule add https://github.com/wengchenyang1/premerge.git premerge
     ```
 
+    If the submodule already exists, you can initialize and update it after cloning the repository using:
+
+    ```sh
+    git submodule update --init --recursive
+    ```
+
 2. **Run the Setup Script**
 
     On Linux/macOS:
