@@ -41,6 +41,22 @@ To set up the pre-merge job runner, follow these steps:
 
     The setup script will set up necessary configurations, such as copying template config files for linting and formatting to the root folder (if there are not any).
 
+3. **Install Dependencies**
+
+    The pre-merge tool requires the following tools to be installed:
+
+    **Python Tools** (install via pip):
+
+    ```sh
+    pip install pylint black isort cpplint
+    ```
+
+    **C++ Tools**:
+    * **clang-format** (for C++ formatting):
+      * Windows: `scoop install llvm` or download from [LLVM releases](https://llvm.org/releases/)
+      * Linux: `sudo apt install clang-format`
+      * macOS: `brew install clang-format`
+
 ## Usage
 
 ### Running the Pre-merge Checks
