@@ -19,17 +19,17 @@ copy_if_not_exists() {
 
     if [[ ! -f "$dest_dir/$file" ]]; then
         cp "$source_dir/$file" "$dest_dir"
-        echo "Copied $file to the parent directory."
+        echo "Copied $file to the project root directory."
     else
-        echo "$file already exists in the parent directory."
+        echo "$file already exists in the project root directory."
     fi
 }
 
-# Check if files exist in the current folder and copy them to the parent folder if needed
-PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+# Check if files exist in the current folder and copy them to the current working directory (project root)
+PROJECT_ROOT="$(pwd)"
 
 for file in "${FILES_TO_COPY[@]}"; do
-    copy_if_not_exists "$file" "$SCRIPT_DIR" "$PARENT_DIR"
+    copy_if_not_exists "$file" "$SCRIPT_DIR" "$PROJECT_ROOT"
 done
 
 echo "Setup complete."

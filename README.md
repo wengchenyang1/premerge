@@ -16,8 +16,10 @@ To set up the pre-merge job runner, follow these steps:
     You may integrate this as a submodule in your existing repository. Navigate to your project root folder and add `premerge` using the following command:
 
     ```sh
-    git submodule add https://github.com/wengchenyang1/premerge.git premerge
+    git submodule add https://github.com/wengchenyang1/premerge.git <premerge_path>
     ```
+
+    Replace `<premerge_path>` with your preferred directory path (e.g., `third_party/premerge` or `tools/premerge`).
 
     If the submodule already exists, you can initialize and update it after cloning the repository using:
 
@@ -27,17 +29,21 @@ To set up the pre-merge job runner, follow these steps:
 
 2. **Run the Setup Script**
 
+    **Important**: Run the setup script from your **project root directory** (not from within the premerge folder):
+
     On Linux/macOS:
 
     ```sh
-    bash ./premerge/setup.sh
+    ./<premerge_path>/setup.sh
     ```
 
     On Windows:
 
     ```bat
-    premerge\setup.bat
+    <premerge_path>\setup.bat
     ```
+
+    Replace `<premerge_path>` with the actual path where you added the submodule (e.g., `third_party/premerge`).
 
     The setup script will set up necessary configurations, such as copying template config files for linting and formatting to the root folder (if there are not any).
 
@@ -64,8 +70,10 @@ To set up the pre-merge job runner, follow these steps:
 To run the pre-merge checks, execute the following command in your project root directory:
 
 ```sh
-python premerge/pre_merge.py
+python <premerge_path>/pre_merge.py
 ```
+
+Replace `<premerge_path>` with the actual path where you added the submodule (e.g., `third_party/premerge`).
 
 ## Note
 
